@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../firebase'
-import { updateUserStart, updateUserSuccess, updateUserFailure } from '../redux/user/userSlice'
+import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserFailure, deleteUserSuccess } from '../redux/user/userSlice'
 import { useDispatch } from 'react-redux'
 
 const Profile = () => {
@@ -16,7 +16,6 @@ const Profile = () => {
 
   const dispatch = useDispatch()
 
-  console.log(formData)
   useEffect(() => {
     if(file) {
       handleFileUpload(file)
@@ -73,7 +72,27 @@ const Profile = () => {
     } catch (error) {
       dispatch(updateUserFailure(error.message));
     }
-  };
+  }
+
+  const handleUserDelete = async () => {
+    try {
+      dispatch(deleteUserStart())
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: 'DELETE',
+      })
+
+      const data = await res.json()
+
+      if(data.success === false) {
+        dispatch(deleteUserFailure(data.message))
+        return
+      }
+
+      dispatch(deleteUserSuccess(data))
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message))
+    }
+  }
 
   return (
     <div className='p-3 max-w-lg mx-auto'>
@@ -103,7 +122,7 @@ const Profile = () => {
       </form>
 
       <div className="flex justify-between mt-5">
-        <span className='text-red-700 cursor-pointer'>Delete Account</span>
+        <span className='text-red-700 cursor-pointer' onClick={handleUserDelete}>Delete Account</span>
         <span className='text-red-700 cursor-pointer'>Sign out</span>
       </div>
 
