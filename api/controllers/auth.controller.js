@@ -41,7 +41,7 @@ export const google = async (req, res, next) => {
             const { password: pass, ...rest} = user._doc
             res
             .cookie('access_token', token, { httpOnly: true })
-            .status(2000)
+            .status(200)
             .json(rest)
         } else {
             const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8)
