@@ -293,7 +293,7 @@ const UpdateListing = () => {
               />
               <div className='flex flex-col items-center'>
                 <p>Regular price</p>
-                <span className='text-xs'>($ / month)</span>
+                <span className='text-xs'>{formData.type === 'sale' ? '$' : '($ / month)'}</span>
               </div>
             </div>
             {formData.offer && (
@@ -310,7 +310,7 @@ const UpdateListing = () => {
                 />
                 <div className='flex flex-col items-center'>
                   <p>Discounted price</p>
-                  <span className='text-xs'>($ / month)</span>
+                  <span className='text-xs'>{formData.type === 'sale' ? '$' : '($ / month)'}</span>
                 </div>
               </div>
             )}
